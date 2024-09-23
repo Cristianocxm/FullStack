@@ -1,20 +1,28 @@
 const { response } = require("express");
+const userService = require('../services/UserService')
 
 class UserController {
-    index(request, responde){
-        response.send("Response from User Controller");
+    async index(request, responde){
+        try {
+            const users = await userService.getAllUsers();
+            response.status(200).json(users);
+        }
+        catch (error){
+            response.status(500).json({message: encodeURIComponent.message})
+
+        }
 
     }
-    show(){
+    async show(){
 
     }
-    store(){
+    async store(){
 
     }
-    update(){
+    async update(){
 
     }
-    delete(){
+    async delete(){
 
     }
 
