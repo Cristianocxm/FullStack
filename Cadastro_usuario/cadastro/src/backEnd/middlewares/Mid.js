@@ -6,7 +6,6 @@ const authenticateJWT = (req, res, next) => {
     return res.status(401).json({ message: 'Acesso negado: Token ausente.' });
   }
 
-  // Separar 'Bearer' do token real
   const token = authHeader.split(' ')[1];  // Extraí o token após 'Bearer'
   if (!token) {
     return res.status(401).json({ message: 'Token malformado' });

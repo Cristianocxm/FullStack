@@ -1,5 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+const StyledLink = styled(Link)`
+  display: block;
+  margin-top: 20px;
+  color: #007bff;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -101,6 +112,7 @@ function Cadastro() {
           />
           <Button type="submit">Cadastrar</Button>
         </form>
+        <StyledLink  to="/">Já possui cadastro? Faça Login</StyledLink >
       </LoginBox>
     </Container>
   );

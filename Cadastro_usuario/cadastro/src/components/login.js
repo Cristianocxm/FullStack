@@ -1,5 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+const StyledLink = styled(Link)`
+  display: block;
+  margin-top: 20px;
+  color: #007bff;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -45,25 +56,32 @@ const Button = styled.button`
 `;
 
 function Login({ setToken }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-
-    if (data.token) {
-      setToken(data.token); // Atualiza o token no estado do App
-      alert(data.message);
-    } else {
-      alert(data.error);
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setToken(data.token); // Atualiza o token no estado do App
+        localStorage.setItem('token', data.token); // Armazena o token no localStorage
+        alert(data.message); // Exibe a mensagem de sucesso
+      } else {
+        alert(data.message || "Erro ao fazer login."); // Mensagem de erro do backend
+      }
+    } catch (error) {
+      console.error("Erro no login:", error);
+      alert("Erro ao conectar ao servidor.");
     }
   };
 
@@ -74,9 +92,9 @@ function Login({ setToken }) {
         <form onSubmit={handleLogin}>
           <Input
             type="text"
-            placeholder="Nome"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <Input
@@ -88,6 +106,7 @@ function Login({ setToken }) {
           />
           <Button type="submit">Login</Button>
         </form>
+        <StyledLink to="/cadastro">Não tem conta? Cadastre-se</StyledLink>
       </LoginBox>
     </Container>
   );
